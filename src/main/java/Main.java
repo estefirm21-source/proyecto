@@ -1,18 +1,13 @@
 import java.util.Scanner;
 
 public class Main {
-    private static final Scanner scanner = new Scanner(System.util.in != null ? System.in : null);
+    private static final Scanner scanner = new Scanner(System.in);
     private static ConsumoService service;
 
     public static void main(String[] args) {
         // Inicializar Capas
         ConsumoRepository repository = new ConsumoDAO();
         service = new ConsumoServiceImpl(repository);
-
-        if (scanner == null) {
-            System.err.println("No se pudo inicializar la entrada de datos.");
-            return;
-        }
 
         boolean salir = false;
         while (!salir) {
@@ -27,23 +22,12 @@ public class Main {
             String opcion = scanner.nextLine();
 
             switch (opcion) {
-                case "1":
-                    registrarNuevoConsumo();
-                    break;
-                case "2":
-                    service.listarHistorial();
-                    break;
-                case "3":
-                    verReporteAnual();
-                    break;
-                case "4":
-                    ejecutarConsultaISO();
-                    break;
-                case "5":
-                    salir = true;
-                    break;
-                default:
-                    System.out.println("Opción no válida.");
+                case "1" -> registrarNuevoConsumo();
+                case "2" -> service.listarHistorial();
+                case "3" -> verReporteAnual();
+                case "4" -> ejecutarConsultaISO();
+                case "5" -> salir = true;
+                default -> System.out.println("Opción no válida.");
             }
         }
         System.out.println("¡Gracias por usar GreenCert!");
@@ -66,17 +50,20 @@ public class Main {
 
             // Si el factor es 0, usamos valores estándar
             if (factor == 0) {
-                if (tipo == 1)
-                    factor = 0.5;
-                else if (tipo == 2)
-                    factor = 2.3;
-                else
-                    factor = 1.8;
+                factor = switch (tipo) {
+                    case 1 -> 0.5;
+                    case 2 -> 2.3;
+                    default -> 1.8;
+                };
             }
 
             service.registrarConsumo(idEmp, tipo, mes, anio, cant, factor);
+        } catch (NumberFormatException e) {
+            System.out.println("Error en los datos ingresados: Asegúrese de ingresar números válidos.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error lógico: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error en los datos ingresados: " + e.getMessage());
+            System.out.println("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -89,6 +76,8 @@ public class Main {
             double total = service.calcularHuellaAnual(id, anio);
             System.out.printf("--- REPORTE ANUAL %d ---\nTotal CO2: %.2f kg\n--------------------------\n", anio,
                     total);
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Debe ingresar un valor numérico correcto.");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -119,6 +108,8 @@ public class Main {
 
             System.out.println("\nRESPUESTA DEL CONSULTOR:");
             System.out.println(respuesta);
+        } catch (java.io.IOException e) {
+            System.err.println("Error de entrada/salida: " + e.getMessage());
         } catch (Exception e) {
             System.err.println("Error en el módulo RAG: " + e.getMessage());
         }
