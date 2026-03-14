@@ -108,8 +108,6 @@ public class Main {
 
             System.out.println("\nRESPUESTA DEL CONSULTOR:");
             System.out.println(respuesta);
-        } catch (java.io.IOException e) {
-            System.err.println("Error de entrada/salida: " + e.getMessage());
         } catch (Exception e) {
             System.err.println("Error en el módulo RAG: " + e.getMessage());
         }
