@@ -1,42 +1,51 @@
-# Activity and Flow Diagram
+# Sequence and Logic Flow Diagram
 
-This diagram represents the logical flow of the main processes within the GreenCert console application, including consumption registration, database queries, and the AI Consulting logic.
+This diagram displays the logical sequence of processes between the User, the Application, the Database, and the AI components. This format (Sequence Diagram) represents the interactions much more clearly than a standard flowchart.
 
 ```mermaid
-flowchart TD
-    Start([Start Application]) --> Menu{Main Menu}
-    
-    %% Option 1: Register Consumption
-    Menu -->|1. Register Consumption| InputCons[Input: Company ID, Type, Date, Amount]
-    InputCons --> Fact[EmissionSourceFactory creates Source]
-    Fact --> Calc[Calculate CO2 Footprint]
-    Calc --> DBIns[ConsumptionDAO invokes insertConsumption]
-    DBIns --> DB[(MySQL Database)]
-    DB --> Menu
-    
-    %% Option 2: View History
-    Menu -->|2. View History| ViewHist[ConsumptionDAO invokes getHistory]
-    ViewHist --> DB
-    DB --> DisplayHist[Display History on Console]
-    DisplayHist --> Menu
-    
-    %% Option 3: Annual Report
-    Menu -->|3. Annual Report| InputRep[Input: Company ID, Year]
-    InputRep --> DBRep[ConsumptionDAO invokes getAnnualSum]
-    DBRep --> DB
-    DB --> DisplayRep[Display CO2 Total]
-    DisplayRep --> Menu
-    
-    %% Option 4: AI ISO Consultant
-    Menu -->|4. AI ISO Consultant| InputQuest[Input: Question]
-    InputQuest --> ReadPDF[PDFReader reads iso14001.pdf]
-    ReadPDF --> Chunk[TextChunker splits text into chunks]
-    Chunk --> Ret[SimpleRetriever finds matching chunks based on query keywords]
-    Ret --> AI[ISOConsultant passes context and question to GeminiLLMClient]
-    AI --> API([Call Google Gemini API])
-    API --> DisplayAI[Display AI Generated Answer]
-    DisplayAI --> Menu
-    
-    %% Option 5: Exit
-    Menu -->|5. Exit| End([Exit Application])
+sequenceDiagram
+    actor User
+    participant App as GreenCertApplication
+    participant Svc as ConsumptionService
+    participant DB as Database (MySQL)
+    participant AI as ISOConsultant
+    participant Gemini as Google Gemini API
+
+    User->>App: Starts Application
+    loop Main Menu
+        App->>User: Displays Menu Options
+        User->>App: Selects an Option
+        
+        alt Option 1: Register Consumption
+            User->>App: Inputs consumption details (Type, Amount, etc.)
+            App->>Svc: registerConsumption(...)
+            Note over Svc: EmissionSourceFactory<br/>creates specific source
+            Svc->>Svc: Calculates CO2 Generation
+            Svc->>DB: insertConsumption(...)
+            DB-->>Svc: DB Insert Confirmation
+            Svc-->>App: Success Processed
+            App->>User: Displays Success Message
+            
+        else Option 2 & 3: History & Reports
+            User->>App: Requests History or Report
+            App->>Svc: Query request (e.g. calculateAnnualFootprint)
+            Svc->>DB: Executes SQL SELECT (getAnnualSum)
+            DB-->>Svc: Returns queried data
+            Svc-->>App: Formats response
+            App->>User: Displays Data on Console
+            
+        else Option 4: AI ISO Consultant
+            User->>App: Questions about ISO 14001
+            Note over App: PDFReader extracts text<br/>TextChunker prepares chunks<br/>SimpleRetriever finds context
+            App->>AI: processQuery(contextChunks, question)
+            AI->>Gemini: Sends Prompt + Context (RAG)
+            Gemini-->>AI: Returns AI Answer
+            AI-->>App: Formatted advice
+            App->>User: Displays Consultant Output
+            
+        else Option 5: Exit
+            User->>App: Selects Exit
+            App->>User: Terminates application
+        end
+    end
 ```
