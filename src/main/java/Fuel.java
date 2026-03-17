@@ -4,7 +4,7 @@ public class Fuel extends EmissionSource {
     public Fuel(double liters, double factor) {
         super(factor);
         if (liters < 0) {
-            throw new IllegalArgumentException("El consumo de combustible (litros) no puede ser negativo.");
+            throw new IllegalArgumentException("Fuel consumption (liters) cannot be negative.");
         }
         this.liters = liters;
     }

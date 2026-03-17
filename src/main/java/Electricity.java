@@ -4,7 +4,7 @@ public class Electricity extends EmissionSource {
     public Electricity(double kwh, double factor) {
         super(factor);
         if (kwh < 0) {
-            throw new IllegalArgumentException("El consumo eléctrico (kWh) no puede ser negativo.");
+            throw new IllegalArgumentException("Electricity consumption (kWh) cannot be negative.");
         }
         this.kwh = kwh;
     }

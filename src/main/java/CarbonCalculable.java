@@ -1,7 +1,8 @@
 public interface CarbonCalculable {
     /**
-     * Calcula la huella de carbono total.
-     * @return El total de emisiones en kg de CO2 equivalente.
+     * Calculates the total carbon footprint.
+     * 
+     * @return Total emissions in kg of CO2 equivalent.
      */
     double calculateCarbonFootprint();
 }
