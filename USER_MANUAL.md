@@ -1,64 +1,64 @@
-# GreenCert - Manual de Usuario
+# GreenCert - User Manual
 
-Bienvenido a **GreenCert**, tu Gestor de Huella de Carbono y Consultor de la Norma ISO 14001 impulsado por Inteligencia Artificial.
+Welcome to **GreenCert**, your Carbon Footprint Manager and ISO 14001 Consultant powered by Artificial Intelligence.
 
-Este documento te guiará paso a paso sobre cómo configurar, ejecutar y utilizar la aplicación de consola.
-
----
-
-## 1. Requisitos Previos
-
-Antes de ejecutar la aplicación, asegúrate de tener instalado lo siguiente en tu sistema:
-- **Java Development Kit (JDK) 21** o superior.
-- **Apache Maven** (para la gestión de dependencias y compilación).
-- **MySQL Server** (para la base de datos).
-- **Git** (opcional, para clonar el repositorio).
+This document will guide you step-by-step on how to configure, execute, and use the console application.
 
 ---
 
-## 2. Configuración Inicial
+## 1. Prerequisites
 
-### Paso 2.1: Base de Datos
-1. Inicia tu servidor MySQL (por ejemplo, a través de XAMPP, Workbench o línea de comandos).
-2. Localiza el archivo `schema.sql` en la raíz del proyecto.
-3. Ejecuta el script `schema.sql` en tu servidor MySQL. Esto creará:
-   - La base de datos `greencert_db`.
-   - Las tablas necesarias (`company`, `emission_source`, `monthly_consumption`).
-   - Los datos por defecto (Electricidad, Combustible, Residuos).
+Before running the application, ensure you have the following installed on your system:
+- **Java Development Kit (JDK) 21** or higher.
+- **Apache Maven** (for dependency management and building).
+- **MySQL Server** (for the database).
+- **Git** (optional, to clone the repository).
 
-### Paso 2.2: Credenciales de Conexión
-1. Abre el archivo `src/main/java/DBConnection.java`.
-2. Modifica el usuario y la contraseña para que coincidan con tu servidor MySQL local:
+---
+
+## 2. Initial Setup
+
+### Step 2.1: Database
+1. Start your MySQL server (for example, via XAMPP, Workbench, or command line).
+2. Locate the `schema.sql` file in the project root.
+3. Execute the `schema.sql` script on your MySQL server. This will create:
+   - The `greencert_db` database.
+   - The necessary tables (`company`, `emission_source`, `monthly_consumption`).
+   - The default data (Electricity, Fuel, Waste).
+
+### Step 2.2: Connection Credentials
+1. Open the `src/main/java/DBConnection.java` file.
+2. Modify the user and password to match your local MySQL server:
    ```java
    String url = "jdbc:mysql://localhost:3306/greencert_db";
-   String user = "root";       // Cambia esto si tu usuario es distinto
-   String password = "password"; // Escribe tu contraseña de MySQL aquí
+   String user = "root";       // Change this if your user is different
+   String password = "password"; // Enter your MySQL password here
    ```
 
-### Paso 2.3: Documento PDF para la IA
-La aplicación utiliza un archivo llamado `iso14001.pdf` para responder preguntas (RAG).
-- Asegúrate de tener un archivo PDF válido llamado `iso14001.pdf` en la **raíz del proyecto** (la misma carpeta donde está el archivo `pom.xml`).
+### Step 2.3: PDF Document for AI
+The application uses a file called `iso14001.pdf` to answer questions (RAG).
+- Make sure you have a valid PDF file named `iso14001.pdf` in the **project root folder** (the same folder where the `pom.xml` file is located).
 
 ---
 
-## 3. Ejecución de la Aplicación
+## 3. Running the Application
 
-Abre tu terminal o línea de comandos, navega hasta la carpeta del proyecto y ejecuta los siguientes comandos:
+Open your terminal or command prompt, navigate to the project folder, and run the following commands:
 
-1. **Compilar el proyecto:**
+1. **Compile the project:**
    ```bash
    mvn clean compile
    ```
-2. **Ejecutar la aplicación:**
+2. **Run the application:**
    ```bash
    mvn exec:java -Dexec.mainClass="GreenCertApplication"
    ```
 
 ---
 
-## 4. Uso de la Aplicación (Menú Principal)
+## 4. Using the Application (Main Menu)
 
-Al iniciar, verás el siguiente menú en la consola:
+Upon startup, you will see the following menu in the console:
 
 ```text
 ===== GREENCERT: CARBON FOOTPRINT MANAGER =====
@@ -70,28 +70,28 @@ Al iniciar, verás el siguiente menú en la consola:
 Select an option: 
 ```
 
-### Opción 1: Register new consumption (Registrar nuevo consumo)
-Permite ingresar un nuevo registro de contaminación para una empresa.
-- **Company ID:** Ingresa el ID de la empresa (asegúrate de que exista en la tabla `company` de la BD).
-- **Type:** Selecciona el recurso que contamina (1 para Electricidad, 2 para Combustible, 3 para Residuos).
-- **Month / Year:** Mes (1-12) y Año (ej. 2024).
-- **Amount:** La cantidad consumida (ej. 150.5).
-- **Emission factor:** El factor de conversión. Puedes ingresar `0` para que el sistema utilice los valores estándar automáticos regidos por los principios de la POO en el código.
+### Option 1: Register new consumption
+Allows you to enter a new pollution record for a company.
+- **Company ID:** Enter the company ID (make sure it exists in the `company` table in the DB).
+- **Type:** Select the polluting resource (1 for Electricity, 2 for Fuel, 3 for Waste).
+- **Month / Year:** Month (1-12) and Year (e.g., 2024).
+- **Amount:** The amount consumed (e.g., 150.5).
+- **Emission factor:** The conversion factor. You can enter `0` to let the system use the automatic standard values governed by OOP principles in the code.
 
-### Opción 2: View complete history (Ver historial completo)
-Imprime en pantalla una lista de todos los registros de consumo guardados en la base de datos, incluyendo la cantidad cruda y los kilogramos de CO2 equivalentes generados.
+### Option 2: View complete history
+Prints on the screen a list of all consumption records saved in the database, including the raw amount and the equivalent kilograms of CO2 generated.
 
-### Opción 3: View annual report (Ver reporte anual)
-Calcula la suma total de emisiones de CO2 generadas por una empresa específica durante un año entero.
-- Ingresa el **Company ID** y el **Year**.
-- El sistema devolverá el Total CO2 en kilogramos.
+### Option 3: View annual report
+Calculates the total sum of CO2 emissions generated by a specific company during an entire year.
+- Enter the **Company ID** and the **Year**.
+- The system will return the Total CO2 in kilograms.
 
-### Opción 4: Consult ISO 14001 Standard (Consultor IA)
-Esta es la función de Inteligencia Artificial (Módulo RAG).
-1. Se te pedirá que ingreses una duda o pregunta sobre normativas ambientales.
-2. Escribe tu pregunta: *Ej. "What are the requirements for environmental policy?"*
-3. El sistema leerá el archivo PDF, buscará las secciones más relevantes, y se las enviará a la API de **Google Gemini**.
-4. Recibirás una respuesta generada por la IA basada **estrictamente** en el documento ISO 14001 proporcionado.
+### Option 4: Consult ISO 14001 Standard (AI Consultant)
+This is the Artificial Intelligence feature (RAG Module).
+1. You will be asked to enter a doubt or question about environmental regulations.
+2. Type your question: *e.g., "What are the requirements for environmental policy?"*
+3. The system will read the PDF file, search for the most relevant sections, and send them to the **Google Gemini** API.
+4. You will receive an AI-generated response based **strictly** on the provided ISO 14001 document.
 
-### Opción 5: Exit (Salir)
-Cierra la conexión con la base de datos y termina la ejecución segura del programa.
+### Option 5: Exit
+Closes the database connection and safely terminates the execution of the program.
