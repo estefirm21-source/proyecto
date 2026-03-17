@@ -1,52 +1,73 @@
-# GreenCert
+<h1 align="center">
+  🌱 GreenCert 
+</h1>
 
-GreenCert is a Carbon Footprint Manager and ISO 14001 Audit Consultant. It is designed to help companies calculate their carbon emissions from various sources (Electricity, Fuel, Waste) and provides an AI-powered consultant to answer questions regarding the ISO 14001 Environmental Management System standard using Retrieval-Augmented Generation (RAG).
+<p align="center">
+  <strong>Carbon Footprint Manager & ISO 14001 AI Consultant</strong>
+</p>
 
-## Features
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=java&logoColor=white" alt="Java"/>
+  <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
+  <img src="https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Maven"/>
+  <img src="https://img.shields.io/badge/Google_Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini AI"/>
+</p>
 
-- **Object-Oriented Core Architecture**: Built on clean domain models utilizing SOLID principles (Strategy, Factory, Open/Closed patterns).
-- **Service & Repository Pattern**: Clean separation of concerns between business logic (`ConsumptionService`) and data access (`ConsumptionRepository`).
-- **Relational Database**: Robust MySQL database schema with constraints, cascading deletes, and indexes for optimized historical reporting.
-- **RAG AI Consultant**: Reads a local `iso14001.pdf` file, chunks the text, retrieves relevant context based on user queries, and interacts with the Google Gemini API to generate accurate, context-aware responses.
+---
 
-## Architecture
+## 📖 About The Project
 
-You can explore the system's architecture and logical flows through the following Mermaid diagrams rendered natively by GitHub:
-- [UML Class Diagram](class_diagram.md): Displays the OOP structure, SOLID principles, and interfaces.
-- [Flow & Activity Diagram](flow_diagram.md): Displays the execution flow of the application processes.
+GreenCert is a comprehensive enterprise application designed to help companies calculate their carbon emissions from various sources (Electricity, Fuel, Waste). Furthermore, it features an **AI-powered consultant** built using **Retrieval-Augmented Generation (RAG)** to answer compliance questions regarding the ISO 14001 Environmental Management System standard.
 
-## Tech Stack
+The core of the application strictly adheres to the **SOLID principles** and Clean Architecture, demonstrating advanced Object-Oriented design patterns.
 
-- **Java 21**
-- **Maven**
-- **MySQL (Connector/J)**
-- **Apache PDFBox** (for PDF parsing)
-- **Gson** (for JSON handling)
-- **Google Gemini API** (LLM Provider)
+## ✨ Core Features
 
-## Setup & Execution
+- 🏗️ **Robust OOP Architecture**: Built using `Factory` and `Strategy` patterns, strictly adhering to the Open/Closed Principle (OCP) for Emission Sources.
+- 🗄️ **Repository Pattern**: Clean separation of concerns between business logic (`ConsumptionService`) and data access layers (`ConsumptionRepository`).
+- 📊 **Relational Database**: Advanced MySQL schema featuring foreign keys, `ON DELETE CASCADE` constraints, referential integrity, and indexed tables for optimized reports.
+- 🤖 **RAG AI Integration**: Parses a local `iso14001.pdf` file, splits text into discrete chunks, performs context retrieval, and interacts with the Google Gemini API to generate accurate, context-aware advice.
+
+## 📐 Architecture & Diagrams
+
+Explore the system's architecture natively rendered by GitHub Mermaid:
+- 🧩 **[UML Class Diagram](class_diagram.md)**: Visualizes the exhaustive OOP structure, interfaces, and SOLID principles.
+- 🔄 **[Flow & Sequence Diagram](flow_diagram.md)**: Details the logical execution flow of the application processes, database constraints, and the AI Pipeline.
+
+---
+
+## 🚀 Getting Started
+
+Follow these steps to run GreenCert locally on your machine. For detailed usage instructions, please refer to the **[USER MANUAL (Español)](USER_MANUAL.md)**.
 
 ### 1. Database Setup
-Execute the `schema.sql` file in your MySQL database to create the required tables, keys, and initial default data.
-
+Execute the `schema.sql` file in your MySQL environment to create the tables and default emission sources.
 ```bash
 mysql -u your_user -p < schema.sql
 ```
 
-### 2. Configure Database Connection
-Set your database credentials inside `src/main/java/DBConnection.java`:
-
+### 2. Configure Credentials
+Update your MySQL credentials inside the Data Access Object configuration `src/main/java/DBConnection.java`:
 ```java
 String url = "jdbc:mysql://localhost:3306/greencert_db";
-String user = "root";       // Change this to your mysql user
-String password = "password"; // Change this to your mysql password
+String user = "root";       // Change this
+String password = "password"; // Change this
 ```
 
-### 3. Build & Run Application
+### 3. Provide ISO Document
+Ensure a valid PDF file named `iso14001.pdf` is placed in the **project root folder**, as it is strictly required by the AI Consultant module.
+
+### 4. Build & Execute
+Compile the project using Maven and run the interactive CLI application:
 ```bash
 mvn clean compile
 mvn exec:java -Dexec.mainClass="GreenCertApplication"
 ```
 
-## Upcoming Implementation: Web Interface
-Phase 2 of the project includes migrating this pure Java Console application into a Spring Boot application using Thymeleaf for the frontend, bringing GreenCert to the web browser.
+---
+
+## 🔭 Roadmap
+
+- [x] Phase 1: Core System (Java Console, SOLID Principles, MySQL).
+- [x] Phase 2: RAG AI Implementation (PDF Text Extraction + Gemini LLM).
+- [ ] **Phase 3: Web Migration**: Transforming the application into a Spring Boot Web App using Thymeleaf for an aesthetic web-based UI.
