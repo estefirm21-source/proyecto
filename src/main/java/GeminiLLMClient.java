@@ -5,8 +5,8 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 /**
- * Cliente para la API de Google Gemini (u otro proveedor compatible).
- * Implementa LLMService de forma robusta.
+ * Client for the Google Gemini API (or other compatible provider).
+ * Robustly implements LLMService.
  */
 public class GeminiLLMClient implements LLMService {
 
@@ -18,16 +18,16 @@ public class GeminiLLMClient implements LLMService {
     }
 
     @Override
-    public String generarRespuesta(List<String> contexto, String pregunta) {
-        if (contexto.isEmpty())
-            return "No hay contexto suficiente para responder.";
+    public String generateResponse(List<String> context, String question) {
+        if (context.isEmpty())
+            return "There is not enough context to answer.";
 
-        String prompt = "Eres un consultor experto en la norma ISO 14001. " +
-                "Basándote EXCLUSIVAMENTE en el siguiente contexto, responde la pregunta del usuario.\n\n" +
-                "CONTEXTO:\n" + String.join("\n", contexto) + "\n\n" +
-                "PREGUNTA: " + pregunta;
+        String prompt = "You are an expert consultant on the ISO 14001 standard. " +
+                "Based EXCLUSIVELY on the following context, answer the user's question.\n\n" +
+                "CONTEXT:\n" + String.join("\n", context) + "\n\n" +
+                "QUESTION: " + question;
 
-        // Escapar caracteres para JSON manual
+        // Escape characters for manual JSON
         String jsonPayload = String.format(
                 "{ \"contents\": [{ \"parts\":[{ \"text\": \"%s\" }] }] }",
                 prompt.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r"));
@@ -43,7 +43,7 @@ public class GeminiLLMClient implements LLMService {
             String body = response.body();
 
             if (response.statusCode() == 200) {
-                // Extracción más robusta buscando la primera ocurrencia de "text" dentro de
+                // More robust extraction looking for the first occurrence of "text" inside
                 // "candidates"
                 int textPos = body.indexOf("\"text\": \"");
                 if (textPos != -1) {
@@ -56,12 +56,12 @@ public class GeminiLLMClient implements LLMService {
                                 .replace("\\\\", "\\");
                     }
                 }
-                return "Respuesta recibida pero con formato inesperado.";
+                return "Response received but with unexpected format.";
             } else {
-                return "Error de API (Status: " + response.statusCode() + "): " + body;
+                return "API Error (Status: " + response.statusCode() + "): " + body;
             }
         } catch (Exception e) {
-            return "Error de conexión con el LLM: " + e.getMessage();
+            return "LLM connection error: " + e.getMessage();
         }
     }
 }
