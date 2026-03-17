@@ -9,6 +9,12 @@ GreenCert is a Carbon Footprint Manager and ISO 14001 Audit Consultant. It is de
 - **Relational Database**: Robust MySQL database schema with constraints, cascading deletes, and indexes for optimized historical reporting.
 - **RAG AI Consultant**: Reads a local `iso14001.pdf` file, chunks the text, retrieves relevant context based on user queries, and interacts with the Google Gemini API to generate accurate, context-aware responses.
 
+## Architecture
+
+You can explore the system's architecture and logical flows through the following Mermaid diagrams rendered natively by GitHub:
+- [UML Class Diagram](class_diagram.md): Displays the OOP structure, SOLID principles, and interfaces.
+- [Flow & Activity Diagram](flow_diagram.md): Displays the execution flow of the application processes.
+
 ## Tech Stack
 
 - **Java 21**
