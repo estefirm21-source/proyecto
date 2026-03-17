@@ -4,7 +4,7 @@ public class Waste extends EmissionSource {
     public Waste(double kg, double factor) {
         super(factor);
         if (kg < 0) {
-            throw new IllegalArgumentException("La cantidad de residuos (kg) no puede ser negativa.");
+            throw new IllegalArgumentException("Waste amount (kg) cannot be negative.");
         }
         this.kg = kg;
     }

@@ -3,14 +3,14 @@ import java.util.List;
 
 public class TextChunker {
 
-    public static List<String> dividirTexto(String texto, int tamañoChunk) {
+    public static List<String> splitText(String text, int chunkSize) {
 
         List<String> chunks = new ArrayList<>();
 
-        for (int i = 0; i < texto.length(); i += tamañoChunk) {
+        for (int i = 0; i < text.length(); i += chunkSize) {
 
-            int fin = Math.min(texto.length(), i + tamañoChunk);
-            chunks.add(texto.substring(i, fin));
+            int end = Math.min(text.length(), i + chunkSize);
+            chunks.add(text.substring(i, end));
 
         }
 

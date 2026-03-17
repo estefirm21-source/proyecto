@@ -6,19 +6,18 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 public class PDFReader {
 
-    public static String leerPDF(String ruta) {
-        String texto = "";
-        File archivo = new File(ruta);
-        try (PDDocument documento = PDDocument.load(archivo)) {
-            PDFTextStripper lector = new PDFTextStripper();
-            texto = lector.getText(documento);
+    public static String readPDF(String path) {
+        String text = "";
+        File file = new File(path);
+        try (PDDocument document = PDDocument.load(file)) {
+            PDFTextStripper reader = new PDFTextStripper();
+            text = reader.getText(document);
 
-            System.out.println("Contenido del PDF:");
-            System.out.println(texto);
+            System.out.println("PDF Content successfully read.");
         } catch (IOException e) {
-            System.out.println("Error al leer el PDF");
+            System.out.println("Error reading the PDF file");
             e.printStackTrace();
         }
-        return texto;
+        return text;
     }
 }

@@ -3,18 +3,18 @@ import java.util.List;
 
 public class SimpleRetriever {
 
-    public static List<String> buscarChunks(List<String> chunks, String pregunta) {
+    public static List<String> searchChunks(List<String> chunks, String question) {
 
-        List<String> resultados = new ArrayList<>();
+        List<String> results = new ArrayList<>();
 
-        String[] palabras = pregunta.toLowerCase().split(" ");
+        String[] words = question.toLowerCase().split(" ");
 
         for (String chunk : chunks) {
 
-            for (String palabra : palabras) {
+            for (String word : words) {
 
-                if (chunk.toLowerCase().contains(palabra)) {
-                    resultados.add(chunk);
+                if (chunk.toLowerCase().contains(word)) {
+                    results.add(chunk);
                     break;
                 }
 
@@ -22,6 +22,6 @@ public class SimpleRetriever {
 
         }
 
-        return resultados;
+        return results;
     }
 }
