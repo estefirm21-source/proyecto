@@ -15,8 +15,7 @@ public class PDFReader {
 
             System.out.println("PDF Content successfully read.");
         } catch (IOException e) {
-            System.out.println("Error reading the PDF file");
-            e.printStackTrace();
+            System.err.println("Error reading the PDF file: " + e.getMessage());
         }
         return text;
     }

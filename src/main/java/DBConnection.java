@@ -13,8 +13,7 @@ public class DBConnection {
             System.out.println("Successful database connection");
             return conn;
         } catch (SQLException e) {
-            System.out.println("Error connecting to the database");
-            e.printStackTrace();
+            System.err.println("Error connecting to the database: " + e.getMessage());
             return null;
         }
     }

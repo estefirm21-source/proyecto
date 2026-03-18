@@ -14,20 +14,12 @@ public class ConsumptionServiceImpl implements ConsumptionService {
     public void registerConsumption(int companyId, int sourceId, int month, int year, double amount, double factor) {
         // Business logic: CO2 calculation occurs here or is delegated to OOP classes
         // We use the Factory to obtain the source and calculate CO2
-        String type;
-        switch (sourceId) {
-            case 1:
-                type = "electricity";
-                break;
-            case 2:
-                type = "fuel";
-                break;
-            case 3:
-                type = "waste";
-                break;
-            default:
-                type = "electricity";
-        }
+        String type = switch (sourceId) {
+            case 1 -> "electricity";
+            case 2 -> "fuel";
+            case 3 -> "waste";
+            default -> "electricity";
+        };
 
         EmissionSource source = EmissionSourceFactory.createSource(type, amount, factor);
         double co2 = source.calculateCarbonFootprint();

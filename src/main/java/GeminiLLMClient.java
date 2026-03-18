@@ -22,10 +22,13 @@ public class GeminiLLMClient implements LLMService {
         if (context.isEmpty())
             return "There is not enough context to answer.";
 
-        String prompt = "You are an expert consultant on the ISO 14001 standard. " +
-                "Based EXCLUSIVELY on the following context, answer the user's question.\n\n" +
-                "CONTEXT:\n" + String.join("\n", context) + "\n\n" +
-                "QUESTION: " + question;
+        String prompt = """
+                You are an expert consultant on the ISO 14001 standard. Based EXCLUSIVELY on the following context, answer the user's question.
+                
+                CONTEXT:
+                %s
+                
+                QUESTION: %s""".formatted(String.join("\n", context), question);
 
         // Escape characters for manual JSON
         String jsonPayload = String.format(

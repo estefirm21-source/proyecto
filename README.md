@@ -1,5 +1,5 @@
 <h1 align="center">
-  🌱 GreenCert 
+   GreenCert 
 </h1>
 
 <p align="center">
@@ -15,28 +15,28 @@
 
 ---
 
-## 📖 About The Project
+## About The Project
 
 GreenCert is a comprehensive enterprise application designed to help companies calculate their carbon emissions from various sources (Electricity, Fuel, Waste). Furthermore, it features an **AI-powered consultant** built using **Retrieval-Augmented Generation (RAG)** to answer compliance questions regarding the ISO 14001 Environmental Management System standard.
 
 The core of the application strictly adheres to the **SOLID principles** and Clean Architecture, demonstrating advanced Object-Oriented design patterns.
 
-## ✨ Core Features
+##  Core Features
 
-- 🏗️ **Robust OOP Architecture**: Built using `Factory` and `Strategy` patterns, strictly adhering to the Open/Closed Principle (OCP) for Emission Sources.
-- 🗄️ **Repository Pattern**: Clean separation of concerns between business logic (`ConsumptionService`) and data access layers (`ConsumptionRepository`).
-- 📊 **Relational Database**: Advanced MySQL schema featuring foreign keys, `ON DELETE CASCADE` constraints, referential integrity, and indexed tables for optimized reports.
-- 🤖 **RAG AI Integration**: Parses a local `iso14001.pdf` file, splits text into discrete chunks, performs context retrieval, and interacts with the Google Gemini API to generate accurate, context-aware advice.
+-  **Robust OOP Architecture**: Built using `Factory` and `Strategy` patterns, strictly adhering to the Open/Closed Principle (OCP) for Emission Sources.
+-  **Repository Pattern**: Clean separation of concerns between business logic (`ConsumptionService`) and data access layers (`ConsumptionRepository`).
+-  **Relational Database**: Advanced MySQL schema featuring foreign keys, `ON DELETE CASCADE` constraints, referential integrity, and indexed tables for optimized reports.
+-  **RAG AI Integration**: Parses a local `iso14001.pdf` file, splits text into discrete chunks, performs context retrieval, and interacts with the Google Gemini API to generate accurate, context-aware advice.
 
-## 📐 Architecture & Diagrams
+##  Architecture & Diagrams
 
 Explore the system's architecture natively rendered by GitHub Mermaid:
-- 🧩 **[UML Class Diagram](class_diagram.md)**: Visualizes the exhaustive OOP structure, interfaces, and SOLID principles.
-- 🔄 **[Flow & Sequence Diagram](flow_diagram.md)**: Details the logical execution flow of the application processes, database constraints, and the AI Pipeline.
+-  **[UML Class Diagram](class_diagram.md)**: Visualizes the exhaustive OOP structure, interfaces, and SOLID principles.
+-  **[Flow & Sequence Diagram](flow_diagram.md)**: Details the logical execution flow of the application processes, database constraints, and the AI Pipeline.
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 Follow these steps to run GreenCert locally on your machine. For detailed usage instructions, please refer to the **[USER MANUAL (Español)](USER_MANUAL.md)**.
 
@@ -66,7 +66,7 @@ mvn exec:java -Dexec.mainClass="GreenCertApplication"
 
 ---
 
-## 🔭 Roadmap
+##  Roadmap
 
 - [x] Phase 1: Core System (Java Console, SOLID Principles, MySQL).
 - [x] Phase 2: RAG AI Implementation (PDF Text Extraction + Gemini LLM).
