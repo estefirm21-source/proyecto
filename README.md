@@ -58,16 +58,17 @@ String password = "password"; // Change this
 Ensure a valid PDF file named `iso14001.pdf` is placed in the **project root folder**, as it is strictly required by the AI Consultant module.
 
 ### 4. Build & Execute
-Compile the project using Maven and run the interactive CLI application:
+Compile the project using Maven and run the Spring Boot Web Application:
 ```bash
-mvn clean compile
-mvn exec:java -Dexec.mainClass="GreenCertApplication"
+mvn clean install
+mvn spring-boot:run
 ```
+Once it starts, open your browser and navigate to **`http://localhost:8080`** to access the Premium Web UI and the AI Chat Consultant.
 
 ---
 
 ##  Roadmap
 
-- [x] Phase 1: Core System (Java Console, SOLID Principles, MySQL).
+- [x] Phase 1: Core System (Java Console, SOLID Principles, SQLite/SQL).
 - [x] Phase 2: RAG AI Implementation (PDF Text Extraction + Gemini LLM).
-- [ ] **Phase 3: Web Migration**: Transforming the application into a Spring Boot Web App using Thymeleaf for an aesthetic web-based UI.
+- [x] **Phase 3: Web Migration**: Transformed the application into a Spring Boot Web App using HTML/CSS for an aesthetic Premium UI.
