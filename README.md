@@ -1,5 +1,5 @@
 <h1 align="center">
-  GreenCert 
+  🌱 GreenCert 
 </h1>
 
 <p align="center">
@@ -15,7 +15,7 @@
 
 ---
 
-##  About The Project
+## 📖 About The Project
 
 GreenCert is a comprehensive enterprise application designed to help companies calculate their carbon emissions from various sources (Electricity, Fuel, Waste). Furthermore, it features an **AI-powered consultant** built using **Retrieval-Augmented Generation (RAG)** to answer compliance questions regarding the ISO 14001 Environmental Management System standard.
 
@@ -28,7 +28,7 @@ The core of the application strictly adheres to the **SOLID principles** and Cle
 -  **Relational Database**: Advanced MySQL schema featuring foreign keys, `ON DELETE CASCADE` constraints, referential integrity, and indexed tables for optimized reports.
 -  **RAG AI Integration**: Parses a local `iso14001.pdf` file, splits text into discrete chunks, performs context retrieval, and interacts with the Google Gemini API to generate accurate, context-aware advice.
 
-## Architecture & Diagrams
+## 📐 Architecture & Diagrams
 
 Explore the system's architecture natively rendered by GitHub Mermaid:
 -  **[UML Class Diagram](class_diagram.md)**: Visualizes the exhaustive OOP structure, interfaces, and SOLID principles.
@@ -36,7 +36,7 @@ Explore the system's architecture natively rendered by GitHub Mermaid:
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
 Follow these steps to run GreenCert locally on your machine. For detailed usage instructions, please refer to the **[USER MANUAL (Español)](USER_MANUAL.md)**.
 
