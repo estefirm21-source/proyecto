@@ -1,0 +1,40 @@
+# Diagrama de Flujo Lógico - GreenCert
+
+Este diagrama de flujo detalla los tres procesos principales del software (Registro de consumo, Reporte SQL, y el ciclo de Inteligencia Artificial RAG).
+
+```mermaid
+flowchart TD
+    Inicio([Inicio de GreenCert]) --> Menu{Menú Principal}
+    
+    Menu -->|Opción 1| Registro[Registrar Nuevo Consumo]
+    Menu -->|Opción 2| Reporte[Historial y Gráficas SQL]
+    Menu -->|Opción 3| Consultor[Chatbot Consultor ISO 14001]
+    
+    %% Flujo 1: Registro
+    Registro --> Tipo{¿Tipo de Emisión?}
+    Tipo -->|Luz| Elec[Objeto: Electricity]
+    Tipo -->|Combustible| Gas[Objeto: Fuel]
+    Tipo -->|Residuos| Basura[Objeto: Waste]
+    
+    Elec --> Calc[Invocar: calculateCarbonFootprint]
+    Gas --> Calc
+    Basura --> Calc
+    
+    Calc --> DB1[(MySQL: Insertar Historial)]
+    DB1 --> Menu
+    
+    %% Flujo 2: Reporte
+    Reporte --> DB2[(MySQL: Consultar Consumos)]
+    DB2 --> Grafica[Generar Reporte de Eficiencia]
+    Grafica --> Menu
+    
+    %% Flujo 3: RAG IA
+    Consultor --> SubirPDF[Aplicación carga manual ISO.pdf]
+    SubirPDF --> Chunk[Dividir PDF en Fragmentos / Chunks]
+    Chunk --> Pregunta[/Usuario escribe pregunta/]
+    Pregunta --> Buscar[Buscar chunks similares semánticamente]
+    Buscar --> Prompt[Armar Prompt enriquecido]
+    Prompt --> API[Conectar con API de OpenAI/Anthropic]
+    API --> Respuesta[/Mostrar respuesta precisa al usuario/]
+    Respuesta --> Menu
+```
