@@ -5,7 +5,6 @@ import com.greencert.ai.IsoConsultantAgent;
 import com.greencert.ai.AiServiceManager;
 import com.greencert.core.factory.EmissionSourceFactory;
 import com.greencert.core.model.EmissionSource;
-import com.greencert.core.service.CarbonCalculatorService;
 import com.greencert.db.dao.EmissionRecordDAO;
 import com.greencert.db.dao.EmissionRecordDAOImpl;
 import com.greencert.db.model.EmissionRecord;
