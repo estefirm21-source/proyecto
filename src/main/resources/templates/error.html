@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - GreenCert</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10B981;
+            --bg-dark: #0f172a;
+            --surface: #1e293b;
+            --text: #f8fafc;
+            --error: #ef4444;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .card {
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
+            max-width: 500px;
+        }
+        h1 { color: var(--error); margin-bottom: 1rem; }
+        p { color: #94a3b8; margin-bottom: 2rem; }
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>¡Ups! Algo salió mal</h1>
+        <p th:text="${error}">Ha ocurrido un error inesperado en el sistema.</p>
+        <a href="/" class="btn">Volver al Inicio</a>
+    </div>
+</body>
+</html>
