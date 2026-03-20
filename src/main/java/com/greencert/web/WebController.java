@@ -17,10 +17,11 @@ import java.util.List;
 @Controller
 public class WebController {
 
-    private final EmissionRecordDAO recordDAO = new EmissionRecordDAOImpl();
+    private final EmissionRecordDAO recordDAO;
     private IsoConsultantAgent aiAgent;
 
-    public WebController() {
+    public WebController(EmissionRecordDAO recordDAO) {
+        this.recordDAO = recordDAO;
         try {
             aiAgent = AiServiceManager.getAgent();
         } catch (Exception e) {
