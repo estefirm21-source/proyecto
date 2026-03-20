@@ -111,7 +111,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                    <mainClass>Main</mainClass>
+                    <mainClass>com.greencert.GreenCertApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
