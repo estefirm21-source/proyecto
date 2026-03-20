@@ -1,52 +1,60 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GreenCert Analytics</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>GreenCert | Gestión Ambiental Inteligente</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #10B981;
-            --primary-dark: #059669;
-            --bg-dark: #0f172a;
-            --surface: #1e293b;
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
-            --shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
-            --transition: all 0.3s ease;
+            --primary: hsl(158, 70%, 45%);
+            --primary-glow: hsla(158, 70%, 45%, 0.3);
+            --secondary: hsl(215, 25%, 27%);
+            --bg: hsl(222, 47%, 11%);
+            --surface: hsla(222, 47%, 15%, 0.7);
+            --surface-accent: hsla(222, 47%, 20%, 0.5);
+            --text: hsl(210, 40%, 98%);
+            --text-muted: hsl(215, 20%, 65%);
+            --border: hsla(215, 20%, 50%, 0.2);
+            --error: hsl(0, 84%, 60%);
+            --success: hsl(142, 70%, 45%);
+            --glass: blur(16px) saturate(180%);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Outfit', sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
+            background: radial-gradient(circle at top right, hsl(158, 30%, 15%), var(--bg));
             color: var(--text);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            overflow-x: hidden;
         }
+
+        /* Glassmorphism Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--surface-accent); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
         /* Navbar */
         nav {
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(10px);
+            background: hsla(222, 47%, 11%, 0.8);
+            backdrop-filter: var(--glass);
             border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
+            padding: 1.25rem 2rem;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .nav-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -54,205 +62,317 @@
         }
 
         .brand {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            color: var(--primary);
+            background: linear-gradient(to right, var(--text), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-pill {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            background: var(--surface);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            font-weight: 500;
         }
 
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Main Layout */
+        main {
+            max-width: 1400px;
+            margin: 2.5rem auto;
             padding: 0 2rem;
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            flex-grow: 1;
+            grid-template-columns: 1fr 400px;
+            gap: 2.5rem;
         }
 
-        /* Cards */
-        .card {
+        /* Cards and Sections */
+        .glass-card {
             background: var(--surface);
+            backdrop-filter: var(--glass);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .card:hover {
+        .glass-card:hover {
             border-color: var(--primary);
-            transform: translateY(-2px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 20px var(--primary-glow);
         }
 
         h2 {
             font-size: 1.5rem;
-            margin-bottom: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             color: var(--text);
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 0.5rem;
-            display: inline-block;
         }
 
-        /* Form */
-        .form-group {
+        h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Forms */
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
             margin-bottom: 1.5rem;
         }
 
-        label {
+        .field-label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
+            font-weight: 500;
         }
 
-        select, input {
+        .input-wrapper {
+            position: relative;
+        }
+
+        input, select {
             width: 100%;
-            padding: 0.75rem 1rem;
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            background: var(--bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
             color: var(--text);
             font-size: 1rem;
-            transition: var(--transition);
+            transition: all 0.3s ease;
         }
 
-        select:focus, input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+            background: hsla(222, 47%, 5%, 0.8);
         }
 
-        button {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        .btn-primary {
+            width: 100%;
+            padding: 1.1rem;
+            background: linear-gradient(135deg, var(--primary), hsl(158, 80%, 35%));
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            width: 100%;
-            transition: var(--transition);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px var(--primary-glow);
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px var(--primary-glow);
+            filter: brightness(1.1);
         }
 
-        /* Table */
-        .table-responsive {
+        /* Data Table */
+        .table-container {
+            margin-top: 1rem;
             overflow-x: auto;
         }
 
         table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-collapse: collapse;
         }
 
         th {
+            text-align: left;
+            padding: 1.25rem;
             color: var(--text-muted);
-            font-weight: 600;
+            font-weight: 500;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            font-size: 0.875rem;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
+            border-bottom: 1px solid var(--border);
         }
 
-        tr:last-child td {
-            border-bottom: none;
+        td {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            font-weight: 400;
         }
+
+        tr:last-child td { border-bottom: none; }
 
         tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
+            background: hsla(222, 47%, 100%, 0.03);
         }
 
-        .badge {
-            background: rgba(16, 185, 129, 0.1);
+        .type-badge {
+            background: hsla(158, 70%, 45%, 0.15);
             color: var(--primary);
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
+            padding: 0.4rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
             font-weight: 600;
+            border: 1px solid hsla(158, 70%, 45%, 0.3);
         }
 
-        /* AI Chat Widget */
+        /* AI Consultant Sidebar */
+        .chat-section {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 180px);
+            position: sticky;
+            top: 100px;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
         .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 400px;
-        }
-        
-        .chat-messages {
             flex-grow: 1;
-            overflow-y: auto;
-            padding: 1rem;
-            background: var(--bg-dark);
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border);
+            background: hsla(222, 47%, 5%, 0.6);
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
 
-        .message {
-            max-width: 85%;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            line-height: 1.5;
-            animation: fadeIn 0.3s ease;
+        .messages {
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        .msg {
+            max-width: 90%;
+            padding: 1rem 1.25rem;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            position: relative;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .message.bot {
+        .msg.bot {
             background: var(--surface);
-            border: 1px solid var(--border);
+            color: var(--text);
             align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--border);
         }
 
-        .message.user {
-            background: var(--primary-dark);
+        .msg.user {
+            background: var(--primary);
             color: white;
             align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 8px 16px var(--primary-glow);
         }
 
-        .chat-input {
+        .chat-footer {
+            padding: 1.25rem;
+            background: hsla(222, 47%, 10%, 0.8);
+            border-top: 1px solid var(--border);
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
-        .chat-input input {
+        #chatInput {
             flex-grow: 1;
+            padding: 0.8rem 1.25rem;
+            background: var(--surface-accent);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: white;
+            font-size: 0.95rem;
         }
-        
-        .chat-input button {
-            width: auto;
-            padding: 0.75rem;
+
+        .send-btn {
+            background: var(--primary);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Loading Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 0.5rem;
+        }
+
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 1100px) {
+            main { grid-template-columns: 1fr; }
+            .chat-section { height: 500px; position: static; }
         }
     </style>
 </head>
@@ -261,108 +381,103 @@
     <nav>
         <div class="nav-content">
             <div class="brand">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2A10 10 0 0 1 22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                GreenCert Analytics
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                GreenCert <span style="font-weight: 300; opacity: 0.7;">Analytics</span>
             </div>
-            <div>
-                <span class="badge">ISO 14001 Ready</span>
+            <div style="display: flex; gap: 1rem;">
+                <div class="status-pill">
+                    <span class="dot"></span> IA Consultant
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="container">
-        <!-- Main Content (Left) -->
-        <div class="main-column">
-            <!-- Registration Card -->
-            <div class="card" style="margin-bottom: 2rem;">
-                <h2>Registrar Consumo</h2>
+    <main>
+        <div class="content-left">
+            <!-- Registration Glass Card -->
+            <section class="glass-card" style="margin-bottom: 2.5rem;">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    Nuevo Registro Ambiental
+                </h2>
                 <form action="/calculate" method="POST">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label for="type">Fuente de Emisión</label>
+                    <div class="input-grid">
+                        <div class="input-wrapper">
+                            <label class="field-label" for="type">Fuente de Emisión</label>
                             <select id="type" name="type" required>
-                                <option value="electricity">Electricidad (kWh)</option>
-                                <option value="fuel">Combustible (Litros)</option>
-                                <option value="waste">Residuos (Kg)</option>
+                                <option value="electricity">⚡ Electricidad (kWh)</option>
+                                <option value="fuel">⛽ Combustible (Litros)</option>
+                                <option value="waste">♻️ Residuos (Kg)</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="amount">Cantidad</label>
-                            <input type="number" id="amount" name="amount" step="0.01" min="0" required placeholder="Ej: 1500.50">
+                        <div class="input-wrapper">
+                            <label class="field-label" for="amount">Cantidad Consumida</label>
+                            <input type="number" id="amount" name="amount" step="0.01" min="0" required placeholder="0.00">
                         </div>
                     </div>
-                    <button type="submit">Calcular y Registrar Huella</button>
+                    <button type="submit" class="btn-primary">Calcular Huella de Carbono</button>
                 </form>
-            </div>
+            </section>
 
-            <!-- History Card -->
-            <div class="card">
-                <h2>Historial de Emisiones</h2>
-                <div class="table-responsive">
+            <!-- History Glass Card -->
+            <section class="glass-card">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Historial de Emisiones
+                </h2>
+                <div class="table-container">
                     <table>
                         <thead>
                             <tr>
                                 <th>Fecha</th>
-                                <th>Tipo</th>
+                                <th>Fuente</th>
                                 <th>Cantidad</th>
-                                <th>Huella (kg CO2e)</th>
+                                <th>Cálculo (kg CO2e)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Thymeleaf loop -->
                             <tr th:each="record : ${records}">
-                                <td th:text="${record.date}">2026-03-18</td>
-                                <td><span class="badge" th:text="${record.sourceType}">electricity</span></td>
-                                <td th:text="${record.amount}">1500.0</td>
-                                <td th:text="${#numbers.formatDecimal(record.calculatedCarbon, 1, 2)}">570.00</td>
+                                <td th:text="${record.recordDate}" style="color: var(--text-muted);">2026-03-20</td>
+                                <td><span class="type-badge" th:text="${record.sourceType}">electricity</span></td>
+                                <td th:text="${record.amount}">0.00</td>
+                                <td>
+                                    <strong th:text="${#numbers.formatDecimal(record.calculatedCarbon, 1, 2)}" style="color: var(--primary);">0.00</strong>
+                                </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(records)}">
-                                <td colspan="4" style="text-align: center; color: var(--text-muted);">No hay registros todavía.</td>
+                                <td colspan="4" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                                    Empieza registrando tu primer consumo para visualizar las analíticas.
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </section>
         </div>
 
-        <!-- Sidebar (Right) -->
-        <div class="sidebar">
-            <div class="card">
-                <div class="card" style="margin-bottom: 2rem;">
-                    <h2>Estado del Sistema</h2>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: var(--text-muted);">Base de Datos SQL</span>
-                            <span th:class="${dbStatus} ? 'badge' : 'badge-error'" 
-                                  th:text="${dbStatus} ? 'Conectada' : 'Error'"
-                                  style="color: #10B981;">Conectada</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: var(--text-muted);">Motor de IA</span>
-                            <span th:class="${aiStatus} ? 'badge' : 'badge-offline'" 
-                                  th:text="${aiStatus} ? 'Activo' : 'Offline'"
-                                  th:style="${aiStatus} ? 'color: #10B981;' : 'color: #ef4444;'">Activo</span>
-                        </div>
+        <!-- AI Sidebar Chat -->
+        <aside class="chat-section">
+            <div class="glass-card chat-container">
+                <div class="chat-header">
+                    <h2>AI Assistant</h2>
+                    <span th:if="${aiStatus}" class="badge" style="background: hsla(158, 70%, 45%, 0.1); color: var(--primary); font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 50px;">ONLINE</span>
+                    <span th:if="${!aiStatus}" class="badge" style="background: hsla(0, 70%, 50%, 0.1); color: var(--error); font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 50px;">OFFLINE</span>
+                </div>
+                <div class="messages" id="chatMessages">
+                    <div class="msg bot">
+                        Hola, soy tu consultor experto en <strong>ISO 14001</strong>. 🌿 
+                        ¿Tienes dudas sobre normativas ambientales o cómo mejorar tu huella?
                     </div>
                 </div>
-
-                <h2>AI ISO Consultant</h2>
-                <div class="chat-container">
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message bot">
-                            Hola, soy tu consultor experto en ISO 14001 y huella de carbono. ¿En qué puedo ayudarte hoy para lograr tu certificación "verde"?
-                        </div>
-                    </div>
-                    <div class="chat-input" style="padding-top: 1rem; border-top: 1px solid var(--border);">
-                        <input type="text" id="chatInput" placeholder="Pregunta sobre la norma ISO 14001..." onkeypress="handleKeyPress(event)">
-                        <button onclick="sendMessage()" title="Enviar mensaje">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                        </button>
-                    </div>
+                <div class="chat-footer">
+                    <input type="text" id="chatInput" placeholder="Pregunta algo..." onkeypress="handleKeyPress(event)">
+                    <button class="send-btn" onclick="sendMessage()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
                 </div>
             </div>
-        </div>
-    </div>
+        </aside>
+    </main>
 
     <script>
         async function sendMessage() {
@@ -372,14 +487,20 @@
             
             if (!userText) return;
 
-            // Add user message
-            messages.innerHTML += `<div class="message user">${userText}</div>`;
+            // Add user message with scale animation
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'msg user';
+            userMsgDiv.textContent = userText;
+            messages.appendChild(userMsgDiv);
+            
             input.value = '';
             messages.scrollTop = messages.scrollHeight;
 
-            // Add loading bot message
-            const loadingId = 'loading-' + Date.now();
-            messages.innerHTML += `<div class="message bot" id="${loadingId}">Analizando normativas... <span class="typing">...</span></div>`;
+            // Typing indicator
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'msg bot';
+            loadingDiv.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+            messages.appendChild(loadingDiv);
             messages.scrollTop = messages.scrollHeight;
 
             try {
@@ -390,20 +511,18 @@
                 });
                 const responseText = await response.text();
                 
-                // Replace loading message with actual response
-                document.getElementById(loadingId).innerHTML = responseText.replace(/\n/g, '<br>');
+                // Animated text replacement
+                loadingDiv.innerHTML = responseText.replace(/\n/g, '<br>');
             } catch (error) {
-                document.getElementById(loadingId).innerHTML = 'Error de conexión con el AI Agent.';
-                document.getElementById(loadingId).style.color = '#ef4444';
+                loadingDiv.innerHTML = '<span style="color: var(--error);">Error al conectar con el servidor de IA.</span>';
             }
             messages.scrollTop = messages.scrollHeight;
         }
 
         function handleKeyPress(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
+            if (e.key === 'Enter') sendMessage();
         }
     </script>
 </body>
 </html>
+

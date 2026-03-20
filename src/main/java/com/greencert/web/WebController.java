@@ -18,15 +18,11 @@ import java.util.List;
 public class WebController {
 
     private final EmissionRecordDAO recordDAO;
-    private IsoConsultantAgent aiAgent;
+    private final IsoConsultantAgent aiAgent;
 
-    public WebController(EmissionRecordDAO recordDAO) {
+    public WebController(EmissionRecordDAO recordDAO, IsoConsultantAgent aiAgent) {
         this.recordDAO = recordDAO;
-        try {
-            aiAgent = AiServiceManager.getAgent();
-        } catch (Exception e) {
-            System.err.println("WebController IA init failed: " + e.getMessage());
-        }
+        this.aiAgent = aiAgent;
     }
 
     @GetMapping("/")
