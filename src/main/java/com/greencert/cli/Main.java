@@ -1,22 +1,21 @@
+package com.greencert.cli;
+
 import com.greencert.ai.DocumentIngestor;
 import com.greencert.ai.IsoConsultantAgent;
 import com.greencert.ai.AiServiceManager;
 import com.greencert.core.factory.EmissionSourceFactory;
 import com.greencert.core.model.EmissionSource;
-import com.greencert.core.service.CarbonCalculatorService;
 import com.greencert.db.dao.EmissionRecordDAO;
 import com.greencert.db.dao.EmissionRecordDAOImpl;
 import com.greencert.db.model.EmissionRecord;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static final CarbonCalculatorService calculatorService = new CarbonCalculatorService();
     private static final EmissionRecordDAO recordDAO = new EmissionRecordDAOImpl();
     private static IsoConsultantAgent aiAgent;
 
