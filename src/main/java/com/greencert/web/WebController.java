@@ -32,7 +32,12 @@ public class WebController {
     public String index(Model model) {
         List<EmissionRecord> records = recordDAO.findAll();
         model.addAttribute("records", records);
-        return "index"; // Renderizará templates/index.html
+        
+        // Estado de los servicios para la UI
+        model.addAttribute("aiStatus", aiAgent != null);
+        model.addAttribute("dbStatus", true); // Si findAll() no falló, la DB está OK
+        
+        return "index";
     }
 
     @PostMapping("/calculate")

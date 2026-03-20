@@ -328,6 +328,24 @@
         <!-- Sidebar (Right) -->
         <div class="sidebar">
             <div class="card">
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h2>Estado del Sistema</h2>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: var(--text-muted);">Base de Datos SQL</span>
+                            <span th:class="${dbStatus} ? 'badge' : 'badge-error'" 
+                                  th:text="${dbStatus} ? 'Conectada' : 'Error'"
+                                  style="color: #10B981;">Conectada</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: var(--text-muted);">Motor de IA</span>
+                            <span th:class="${aiStatus} ? 'badge' : 'badge-offline'" 
+                                  th:text="${aiStatus} ? 'Activo' : 'Offline'"
+                                  th:style="${aiStatus} ? 'color: #10B981;' : 'color: #ef4444;'">Activo</span>
+                        </div>
+                    </div>
+                </div>
+
                 <h2>AI ISO Consultant</h2>
                 <div class="chat-container">
                     <div class="chat-messages" id="chatMessages">
