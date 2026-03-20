@@ -1,3 +1,6 @@
+import com.greencert.core.model.EmissionSource;
+import com.greencert.core.factory.EmissionSourceFactory;
+
 /**
  * Implementation of the service layer.
  * Extra validations or complex business logic can be added here.
@@ -21,7 +24,7 @@ public class ConsumptionServiceImpl implements ConsumptionService {
             default -> "electricity";
         };
 
-        EmissionSource source = EmissionSourceFactory.createSource(type, amount, factor);
+        EmissionSource source = EmissionSourceFactory.createEmissionSource(type, amount);
         double co2 = source.calculateCarbonFootprint();
 
         // Persistence through the repository
