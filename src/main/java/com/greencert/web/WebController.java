@@ -5,7 +5,6 @@ import com.greencert.ai.IsoConsultantAgent;
 import com.greencert.core.factory.EmissionSourceFactory;
 import com.greencert.core.model.EmissionSource;
 import com.greencert.db.dao.EmissionRecordDAO;
-import com.greencert.db.dao.EmissionRecordDAOImpl;
 import com.greencert.db.model.EmissionRecord;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
