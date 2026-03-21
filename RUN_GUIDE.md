@@ -16,9 +16,10 @@ set OPENAI_API_KEY=tu_clave_aqui
 ```
 
 ## 2. Ejecutar con Maven
-Navega a la carpeta raíz del proyecto (`progra2/proyecto`) y ejecuta:
+Debes entrar primero a la carpeta del proyecto antes de ejecutar el comando:
 
-```bash
+```powershell
+cd "C:\Users\estef\OneDrive\Escritorio\progra2\proyecto"
 mvn spring-boot:run
 ```
 

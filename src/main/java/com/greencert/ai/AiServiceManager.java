@@ -17,14 +17,14 @@ public class AiServiceManager {
     private static IsoConsultantAgent agent;
     private static EmbeddingStore<TextSegment> embeddingStore;
     private static EmbeddingModel embeddingModel;
+    private static boolean isMockMode = false;
 
     public static void initialize() {
         String apiKey = System.getenv("OPENAI_API_KEY");
         
-        if (apiKey == null || apiKey.trim().isEmpty() || apiKey.equals("demo")) {
-            System.err.println("CRITICAL: OPENAI_API_KEY not found in environment variables.");
-            System.err.println("The AI Assistant will be unavailable. Please set the environment variable and restart the application.");
-            agent = null;
+        if (apiKey == null || apiKey.trim().isEmpty() || apiKey.equals("demo") || apiKey.equals("edtpe2170")) {
+            System.err.println("--- MODO DEMO ACTIVADO (Clave no válida o ausente) ---");
+            isMockMode = true;
             return;
         }
 
@@ -60,24 +60,25 @@ public class AiServiceManager {
                     .contentRetriever(contentRetriever)
                     .build();
             
-            System.out.println("AI Agent successfully initialized.");
+            System.out.println("Consultor IA inicializado correctamente.");
+            isMockMode = false;
         } catch (Exception e) {
-            System.err.println("FAILED to initialize AI Agent: " + e.getMessage());
+            System.err.println("Error crítico inicializando IA: " + e.getMessage());
             agent = null;
+            isMockMode = true;
         }
     }
 
     public static IsoConsultantAgent getAgent() {
-        if (agent == null) {
-            initialize();
+        if (isMockMode || agent == null) {
+            // If in mock mode or agent failed to initialize, return a mock agent
+            return message -> "🌿 [MODO DEMO] ¡Hola! Parece que no tienes una clave de OpenAI activa o configurada. Pero como consultor ambiental, te puedo decir que lo más importante es medir tu huella para poder reducirla. ¡Sigue registrando tus consumos!";
         }
         return agent;
     }
 
     public static EmbeddingStore<TextSegment> getEmbeddingStore() {
-        if (embeddingStore == null) {
-            initialize();
-        }
+        // No need to call initialize() here, as it's called by getAgent() or explicitly
         return embeddingStore;
     }
 
@@ -86,5 +87,8 @@ public class AiServiceManager {
             initialize();
         }
         return embeddingModel;
+    }
+    public static boolean isMockMode() {
+        return isMockMode;
     }
 }

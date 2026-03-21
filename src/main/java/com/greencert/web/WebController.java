@@ -56,12 +56,16 @@ public class WebController {
     @ResponseBody
     public String chat(@RequestParam String message) {
         if (aiAgent == null) {
-            return "El Agente IA no está inicializado. Verifica tu API Key.";
+            return "Lo siento, el consultor IA no está disponible en este momento.";
         }
         try {
-            return aiAgent.chat(message);
-        } catch (Exception e) {
-            return "Error de IA: " + e.getMessage();
+            return aiAgent.answer(message);
+        } catch (RuntimeException e) {
+            // Manejar errores de API Key o conexión de forma amigable
+            if (e.getMessage().contains("API key") || e.getMessage().contains("401")) {
+                return "🌿 [MODO DEMO FORZADO] Parece que hay un problema con la clave de OpenAI. Recuerda que puedes usar 'demo' como clave para evitar este error.";
+            }
+            return "Lo siento, ocurrió un error al procesar tu pregunta: " + e.getMessage();
         }
     }
 }
