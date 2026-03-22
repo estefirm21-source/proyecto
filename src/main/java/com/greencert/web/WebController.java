@@ -29,9 +29,19 @@ public class WebController {
         List<EmissionRecord> records = recordDAO.findAll();
         model.addAttribute("records", records);
         
+        // --- Estadísticas para Chart.js ---
+        double eTotal = records.stream().filter(r -> "electricity".equals(r.getSourceType())).mapToDouble(EmissionRecord::getCalculatedCarbon).sum();
+        double fTotal = records.stream().filter(r -> "fuel".equals(r.getSourceType())).mapToDouble(EmissionRecord::getCalculatedCarbon).sum();
+        double wTotal = records.stream().filter(r -> "waste".equals(r.getSourceType())).mapToDouble(EmissionRecord::getCalculatedCarbon).sum();
+        
+        model.addAttribute("eTotal", eTotal);
+        model.addAttribute("fTotal", fTotal);
+        model.addAttribute("wTotal", wTotal);
+        
         // Estado de los servicios para la UI
         model.addAttribute("aiStatus", aiAgent != null);
-        model.addAttribute("dbStatus", true); // Si findAll() no falló, la DB está OK
+        model.addAttribute("aiDemo", AiServiceManager.isMockMode());
+        model.addAttribute("dbStatus", true); 
         
         return "index";
     }
@@ -61,9 +71,10 @@ public class WebController {
         try {
             return aiAgent.answer(message);
         } catch (RuntimeException e) {
-            // Manejar errores de API Key o conexión de forma amigable
-            if (e.getMessage().contains("API key") || e.getMessage().contains("401")) {
-                return "🌿 [MODO DEMO FORZADO] Parece que hay un problema con la clave de OpenAI. Recuerda que puedes usar 'demo' como clave para evitar este error.";
+            // Manejar errores de API Key, conexión o CUOTA de forma amigable
+            String errMsg = (e.getMessage() != null) ? e.getMessage().toLowerCase() : "";
+            if (errMsg.contains("api key") || errMsg.contains("401") || errMsg.contains("quota") || errMsg.contains("limit")) {
+                return "🌿 [MODO DEMO FORZADO] Parece que hay un problema con la cuota o clave de OpenAI. Pero aquí tienes un consejo: Para reducir tu huella, intenta optimizar el uso de energía en horas pico.";
             }
             return "Lo siento, ocurrió un error al procesar tu pregunta: " + e.getMessage();
         }

@@ -6,6 +6,8 @@
     <title>GreenCert | Gestión Ambiental Inteligente</title>
     <!-- Google Fonts: Outfit -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: hsl(158, 70%, 45%);
@@ -421,6 +423,19 @@
                 </form>
             </section>
 
+            <!-- Stats Glass Card -->
+            <section class="glass-card" style="margin-bottom: 2.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                        Analíticas de Impacto
+                    </h2>
+                </div>
+                <div style="height: 250px; position: relative; display: flex; justify-content: center;">
+                    <canvas id="emissionsChart"></canvas>
+                </div>
+            </section>
+
             <!-- History Glass Card -->
             <section class="glass-card">
                 <h2>
@@ -527,6 +542,32 @@
         function handleKeyPress(e) {
             if (e.key === 'Enter') sendMessage();
         }
+
+        // --- Chart.js ---
+        const ctx = document.getElementById('emissionsChart').getContext('2d');
+        const emissionsChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Electricidad', 'Combustible', 'Residuos'],
+                datasets: [{
+                    data: [[[${eTotal}]], [[${fTotal}]], [[${wTotal}]]],
+                    backgroundColor: ['#4ade80', '#3b82f6', '#f59e0b'],
+                    borderWidth: 0,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#e5e7eb', font: { family: 'Outfit', size: 12 } }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
     </script>
 </body>
 </html>
