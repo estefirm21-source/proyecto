@@ -4,7 +4,7 @@ public class Fuel extends EmissionSource {
     private final double liters;
 
     public Fuel(double liters) {
-        super(2.3); // Factor de emisión ejemplo
+        super(2.3); // Example emission factor
         this.liters = liters;
     }
 
@@ -19,6 +19,6 @@ public class Fuel extends EmissionSource {
 
     @Override
     public String getReportDetails() {
-        return "Combustible: " + liters + " Litros | Factor: " + getEmissionFactor() + " | Huella: " + calculateCarbonFootprint() + " kgCO2e";
+        return "Fuel: " + liters + " Liters | Factor: " + getEmissionFactor() + " | Footprint: " + calculateCarbonFootprint() + " kgCO2e";
     }
 }

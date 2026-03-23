@@ -12,9 +12,9 @@ public class DatabaseManager {
 
     static {
         try {
-            // Configuración del Pool de Conexiones
+            // Connection Pool Configuration
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl("jdbc:sqlite:greencert.db"); // Base de datos embebida (local)
+            config.setJdbcUrl("jdbc:sqlite:greencert.db"); // Embedded database (local)
             config.setMaximumPoolSize(10);
             config.setMinimumIdle(2);
             config.setIdleTimeout(30000);
@@ -23,12 +23,12 @@ public class DatabaseManager {
             
             dataSource = new HikariDataSource(config);
             
-            // Inicializar esquema si no existe
+            // Initialize schema if it doesn't exist
             initializeDatabase();
             
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Error inicializando el Pool de Conexiones de Base de Datos", e);
+            throw new RuntimeException("Error initializing Database Connection Pool", e);
         }
     }
 
@@ -44,16 +44,16 @@ public class DatabaseManager {
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSql);
-            System.out.println("Base de datos SQLite y tabla 'emission_records' verificadas/creadas con éxito.");
+            System.out.println("SQLite database and 'emission_records' table verified/created successfully.");
         } catch (SQLException e) {
-            System.err.println("Error al crear esquema de la base de datos.");
+            System.err.println("Error creating database schema.");
             e.printStackTrace();
         }
     }
 
     /**
-     * Obtiene una conexión del Pool.
-     * @return Connection lista para transacciones.
+     * Gets a connection from the Pool.
+     * @return Connection ready for transactions.
      * @throws SQLException
      */
     public static Connection getConnection() throws SQLException {

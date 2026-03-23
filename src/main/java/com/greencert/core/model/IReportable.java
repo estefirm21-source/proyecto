@@ -2,8 +2,8 @@ package com.greencert.core.model;
 
 public interface IReportable {
     /**
-     * Obtiene los detalles del reporte de la fuente de emisión.
-     * @return Detalle del registro.
+     * Gets the report details for the emission source.
+     * @return Detail of the record.
      */
     String getReportDetails();
 }

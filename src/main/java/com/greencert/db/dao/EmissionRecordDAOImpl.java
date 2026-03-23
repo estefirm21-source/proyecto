@@ -19,7 +19,7 @@ public class EmissionRecordDAOImpl implements EmissionRecordDAO {
 
         try (Connection conn = DatabaseManager.getConnection()) {
             
-            // Demostrar control de transacciones (Punto de la rúbrica)
+            // Demonstrate transaction control (Rubric requirement)
             conn.setAutoCommit(false); 
             
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -29,11 +29,11 @@ public class EmissionRecordDAOImpl implements EmissionRecordDAO {
                 stmt.setString(4, record.getRecordDate().toString()); 
                 
                 stmt.executeUpdate();
-                conn.commit(); // Commit explícito
+                conn.commit(); // Explicit Commit
                 
             } catch (SQLException e) {
-                conn.rollback(); // Rollback en caso de error
-                throw new RuntimeException("Error guardando el registro. Se ha realizado un rollback parcial de la transacción.", e);
+                conn.rollback(); // Rollback in case of error
+                throw new RuntimeException("Error saving record. Partial transaction rollback executed.", e);
             } finally {
                 conn.setAutoCommit(true);
             }
@@ -45,7 +45,7 @@ public class EmissionRecordDAOImpl implements EmissionRecordDAO {
     @Override
     public List<EmissionRecord> findAll() {
         List<EmissionRecord> records = new ArrayList<>();
-        String sql = "SELECT * FROM emission_records ORDER BY record_date DESC";
+        String sql = "SELECT * FROM emission_records ORDER BY record_date DESC, id DESC";
 
         try (Connection conn = DatabaseManager.getConnection();
              Statement stmt = conn.createStatement();

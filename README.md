@@ -1,74 +1,143 @@
-<h1 align="center">
-   GreenCert 
-</h1>
+# 🌍 GreenCert Analytics - Enterprise Carbon Management System
 
-<p align="center">
-  <strong>Carbon Footprint Manager & ISO 14001 AI Consultant</strong>
-</p>
+GreenCert is a professional **Object-Oriented** enterprise solution designed to track, analyze, and offset corporate carbon footprints while adhering strictly to **ISO 14001** standards. This platform replaces procedural legacy systems with a robust, modern Java architecture.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=java&logoColor=white" alt="Java"/>
-  <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
-  <img src="https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Maven"/>
-  <img src="https://img.shields.io/badge/Google_Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini AI"/>
-</p>
+## 🚀 Key Features
+- **Object-Oriented Design**: Built entirely following OOP and SOLID principles (Encapsulation, Polymorphism, Abstraction).
+- **SQLite Persistence**: Full CRUD lifecycle (Create, Read, Delete) for emission tracking.
+- **AI RAG Consultant**: Integrates a LangChain4j AI agent equipped with Retrieval-Augmented Generation (RAG) to dynamically answer questions based on the `iso14001.pdf` documentation.
+- **Premium Glassmorphism UI**: High-end user interface utilizing Chart.js for real-time visual analytics.
+- **Smart Fallback Tiers**: If OpenAI APIs are unavailable, the system safely falls back to a smart heuristic Mock Consultant.
 
 ---
 
-## About The Project
+## 🏗️ Architecture & Technical Documentation
 
-GreenCert is a comprehensive enterprise application designed to help companies calculate their carbon emissions from various sources (Electricity, Fuel, Waste). Furthermore, it features an **AI-powered consultant** built using **Retrieval-Augmented Generation (RAG)** to answer compliance questions regarding the ISO 14001 Environmental Management System standard.
+### 1. Object-Oriented Domain (UML Class Diagram)
 
-The core of the application strictly adheres to the **SOLID principles** and Clean Architecture, demonstrating advanced Object-Oriented design patterns.
+The core domain employs the **Factory Pattern** and **Polymorphism** to abstract emission calculations.
 
-##  Core Features
+```mermaid
+classDiagram
+    class EmissionSource {
+        <<abstract>>
+        -double emissionFactor
+        +getEmissionFactor() double
+        +calculateCarbonFootprint()* double
+        +getReportDetails()* String
+    }
+    
+    class Electricity {
+        -double kwh
+        +calculateCarbonFootprint() double
+    }
+    class Fuel {
+        -double liters
+        +calculateCarbonFootprint() double
+    }
+    class Waste {
+        -double kg
+        +calculateCarbonFootprint() double
+    }
+    
+    EmissionSource <|-- Electricity
+    EmissionSource <|-- Fuel
+    EmissionSource <|-- Waste
 
--  **Robust OOP Architecture**: Built using `Factory` and `Strategy` patterns, strictly adhering to the Open/Closed Principle (OCP) for Emission Sources.
--  **Repository Pattern**: Clean separation of concerns between business logic (`ConsumptionService`) and data access layers (`ConsumptionRepository`).
--  **Relational Database**: Advanced MySQL schema featuring foreign keys, `ON DELETE CASCADE` constraints, referential integrity, and indexed tables for optimized reports.
--  **RAG AI Integration**: Parses a local `iso14001.pdf` file, splits text into discrete chunks, performs context retrieval, and interacts with the Google Gemini API to generate accurate, context-aware advice.
+    class EmissionSourceFactory {
+        +createEmissionSource(type, amount) EmissionSource$
+    }
+    EmissionSourceFactory ..> EmissionSource : creates
 
-## Architecture & Diagrams
+    class EmissionRecord {
+        -int id
+        -String sourceType
+        -double amount
+        -double calculatedCarbon
+        -LocalDate recordDate
+    }
 
-Explore the system's architecture natively rendered by GitHub Mermaid:
--  **[UML Class Diagram](class_diagram.md)**: Visualizes the exhaustive OOP structure, interfaces, and SOLID principles.
--  **[Flow & Sequence Diagram](flow_diagram.md)**: Details the logical execution flow of the application processes, database constraints, and the AI Pipeline.
+    class EmissionRecordDAO {
+        <<interface>>
+        +save(record) void
+        +findAll() List~EmissionRecord~
+        +delete(id) void
+    }
+    
+    class EmissionRecordDAOImpl {
+        +save(record) void
+        +findAll() List~EmissionRecord~
+        +delete(id) void
+    }
+    
+    EmissionRecordDAO <|.. EmissionRecordDAOImpl
+    EmissionRecordDAOImpl ..> DatabaseManager : uses
+```
+
+### 2. System Flow (Logic Diagram)
+
+The application handles dual flows: traditional transactional data processing and AI RAG knowledge retrieval.
+
+```mermaid
+flowchart TD
+    %% User Inputs
+    User((User)) -->|Inputs Data| HTTP_POST[/POST /calculate/]
+    User -->|Asks Question| HTTP_CHAT[/POST /api/chat/]
+    
+    %% Transactional Flow
+    HTTP_POST --> WebController
+    WebController --> Factory{EmissionSourceFactory}
+    Factory -->|Instantiates| Source[Electricity / Fuel / Waste]
+    Source -->|Calculates| CO2[calculateCarbonFootprint]
+    CO2 --> ER[EmissionRecord]
+    ER --> DAO[EmissionRecordDAO]
+    DAO --> SQLite[(greencert.db)]
+    
+    %% AI Flow
+    HTTP_CHAT --> AI_Manager(AiServiceManager)
+    AI_Manager --> Check{Is OpenAI Key Valid?}
+    Check -->|No| Mock[Smart Mock Fallback]
+    Check -->|Yes| LLM[LangChain4j Agent]
+    
+    %% RAG Retrieval
+    LLM --> Retriever[EmbeddingStoreRetriever]
+    Retriever <--> VectorDB[(InMemory Vector DB)]
+    PDF[\iso14001.pdf/] -->|Ingested Once| VectorDB
+    
+    Retriever -->|Context| LLM
+    LLM -->|Consultation Answer| ChatGPT[OpenAI API]
+    
+    %% Output
+    ChatGPT --> UI(Premium UI Dashboard)
+    Mock --> UI
+    SQLite -->|Updates History & Charts| UI
+```
 
 ---
 
-##  Getting Started
+## ⚙️ Setup and Installation Guide
 
-Follow these steps to run GreenCert locally on your machine. For detailed usage instructions, please refer to the **[USER MANUAL (Español)](USER_MANUAL.md)**.
+### Prerequisites
+- **Java 17 or higher** (JDK 21 Recommended).
+- **Apache Maven**.
+- **OpenAI API Key** (Optional, will use Mock Mode if missing).
 
-### 1. Database Setup
-Execute the `schema.sql` file in your MySQL environment to create the tables and default emission sources.
-```bash
-mysql -u your_user -p < schema.sql
-```
-
-### 2. Configure Credentials
-Update your MySQL credentials inside the Data Access Object configuration `src/main/java/DBConnection.java`:
-```java
-String url = "jdbc:mysql://localhost:3306/greencert_db";
-String user = "root";       // Change this
-String password = "password"; // Change this
-```
-
-### 3. Provide ISO Document
-Ensure a valid PDF file named `iso14001.pdf` is placed in the **project root folder**, as it is strictly required by the AI Consultant module.
-
-### 4. Build & Execute
-Compile the project using Maven and run the Spring Boot Web Application:
-```bash
-mvn clean install
-mvn spring-boot:run
-```
-Once it starts, open your browser and navigate to **`http://localhost:8080`** to access the Premium Web UI and the AI Chat Consultant.
+### Execution Steps
+1. Clone the repository and navigate to the project root.
+2. Unzip dependencies if required or let Maven resolve them.
+3. Configure your API key exclusively in your terminal (do not hardcode it!):
+   ```bash
+   # Windows (PowerShell)
+   $env:OPENAI_API_KEY="your-key-here"
+   
+   # Linux/Mac
+   export OPENAI_API_KEY="your-key-here"
+   ```
+4. Build and Run the Spring Boot embedded container:
+   ```bash
+   mvn spring-boot:run
+   ```
+5. Open your browser and navigate to Application URL: **[http://localhost:8080](http://localhost:8080)**
 
 ---
-
-##  Roadmap
-
-- [x] Phase 1: Core System (Java Console, SOLID Principles, SQLite/SQL).
-- [x] Phase 2: RAG AI Implementation (PDF Text Extraction + Gemini LLM).
-- [x] **Phase 3: Web Migration**: Transformed the application into a Spring Boot Web App using HTML/CSS for an aesthetic Premium UI.
+*Developed under strict OOP patterns and ISO 14001 structural principles for academic and professional excellence.*

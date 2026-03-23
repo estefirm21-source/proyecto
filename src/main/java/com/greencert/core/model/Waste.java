@@ -4,7 +4,7 @@ public class Waste extends EmissionSource {
     private final double kg;
 
     public Waste(double kg) {
-        super(1.8); // Factor de emisión ejemplo
+        super(1.8); // Example emission factor
         this.kg = kg;
     }
     
@@ -19,6 +19,6 @@ public class Waste extends EmissionSource {
 
     @Override
     public String getReportDetails() {
-        return "Residuos: " + kg + " kg | Factor: " + getEmissionFactor() + " | Huella: " + calculateCarbonFootprint() + " kgCO2e";
+        return "Waste: " + kg + " kg | Factor: " + getEmissionFactor() + " | Footprint: " + calculateCarbonFootprint() + " kgCO2e";
     }
 }

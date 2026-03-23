@@ -2,8 +2,8 @@ package com.greencert.core.model;
 
 public interface ICalculator {
     /**
-     * Calcula la huella de carbono total.
-     * @return El impacto de carbono calculado.
+     * Calculates the total carbon footprint.
+     * @return The calculated carbon impact.
      */
     double calculateCarbonFootprint();
 }

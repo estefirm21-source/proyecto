@@ -4,7 +4,7 @@ public class Electricity extends EmissionSource {
     private final double kwh;
 
     public Electricity(double kwh) {
-        super(0.5); // Factor de emisión ejemplo
+        super(0.5); // Example emission factor
         this.kwh = kwh;
     }
 
@@ -19,6 +19,6 @@ public class Electricity extends EmissionSource {
 
     @Override
     public String getReportDetails() {
-        return "Electricidad: " + kwh + " kWh | Factor: " + getEmissionFactor() + " | Huella: " + calculateCarbonFootprint() + " kgCO2e";
+        return "Electricity: " + kwh + " kWh | Factor: " + getEmissionFactor() + " | Footprint: " + calculateCarbonFootprint() + " kgCO2e";
     }
 }

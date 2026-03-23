@@ -29,7 +29,7 @@ public class WebController {
         List<EmissionRecord> records = recordDAO.findAll();
         model.addAttribute("records", records);
         
-        // --- Estadísticas para Chart.js ---
+        // --- Statistics for Chart.js ---
         double eTotal = records.stream().filter(r -> "electricity".equals(r.getSourceType())).mapToDouble(EmissionRecord::getCalculatedCarbon).sum();
         double fTotal = records.stream().filter(r -> "fuel".equals(r.getSourceType())).mapToDouble(EmissionRecord::getCalculatedCarbon).sum();
         double wTotal = records.stream().filter(r -> "waste".equals(r.getSourceType())).mapToDouble(EmissionRecord::getCalculatedCarbon).sum();
@@ -38,7 +38,7 @@ public class WebController {
         model.addAttribute("fTotal", fTotal);
         model.addAttribute("wTotal", wTotal);
         
-        // Estado de los servicios para la UI
+        // Service status for UI
         model.addAttribute("aiStatus", aiAgent != null);
         model.addAttribute("aiDemo", AiServiceManager.isMockMode());
         model.addAttribute("dbStatus", true); 
@@ -49,13 +49,22 @@ public class WebController {
     @PostMapping("/calculate")
     public String calculate(@RequestParam String type, @RequestParam double amount) {
         try {
-            // Reutilizando lógica POO estructurada previamente
+            // Reusing previously structured OOP logic
             EmissionSource source = EmissionSourceFactory.createEmissionSource(type, amount);
             double calculatedCarbon = source.calculateCarbonFootprint();
             
-            // Persistencia SQL
+            // SQL Persistence
             EmissionRecord record = new EmissionRecord(type, amount, calculatedCarbon, LocalDate.now());
             recordDAO.save(record);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/";
+    }
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable int id) {
+        try {
+            recordDAO.delete(id);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,17 +75,17 @@ public class WebController {
     @ResponseBody
     public String chat(@RequestParam String message) {
         if (aiAgent == null) {
-            return "Lo siento, el consultor IA no está disponible en este momento.";
+            return "I am sorry, the AI consultant is not available at this moment.";
         }
         try {
-            return aiAgent.answer(message);
+            return aiAgent.chat(message);
         } catch (RuntimeException e) {
-            // Manejar errores de API Key, conexión o CUOTA de forma amigable
+            // Handle API Key, connection, or QUOTA errors gracefully without revealing technical details
             String errMsg = (e.getMessage() != null) ? e.getMessage().toLowerCase() : "";
             if (errMsg.contains("api key") || errMsg.contains("401") || errMsg.contains("quota") || errMsg.contains("limit")) {
-                return "🌿 [MODO DEMO FORZADO] Parece que hay un problema con la cuota o clave de OpenAI. Pero aquí tienes un consejo: Para reducir tu huella, intenta optimizar el uso de energía en horas pico.";
+                return AiServiceManager.getMockResponse(message);
             }
-            return "Lo siento, ocurrió un error al procesar tu pregunta: " + e.getMessage();
+            return "I am sorry, the consultant is currently analyzing other data. Please try again later.";
         }
     }
 }

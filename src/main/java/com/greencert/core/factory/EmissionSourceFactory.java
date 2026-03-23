@@ -8,14 +8,14 @@ import com.greencert.core.model.Waste;
 public class EmissionSourceFactory {
 
     /**
-     * Factory method para crear fuentes de emisión.
-     * @param type "electricity", "fuel", o "waste"
-     * @param value Cantidad consumida (kWh, L, Kg)
-     * @return Instancia de EmissionSource
+     * Factory method for creating emission sources.
+     * @param type "electricity", "fuel", or "waste"
+     * @param value Consumed amount (kWh, L, Kg)
+     * @return EmissionSource instance
      */
     public static EmissionSource createEmissionSource(String type, double value) {
         if (type == null) {
-            throw new IllegalArgumentException("El tipo de fuente de emisión no puede ser nulo");
+            throw new IllegalArgumentException("The emission source type cannot be null");
         }
         
         switch (type.toLowerCase()) {
@@ -26,7 +26,7 @@ public class EmissionSourceFactory {
             case "waste":
                 return new Waste(value);
             default:
-                throw new IllegalArgumentException("Tipo de fuente de emisión no soportado: " + type);
+                throw new IllegalArgumentException("Unsupported emission source type: " + type);
         }
     }
 }
