@@ -21,12 +21,10 @@ public class WebController {
 
     private final EmissionRecordDAO recordDAO;
     private final IsoConsultantAgent aiAgent;
-    private final UserDAO userDAO;
 
-    public WebController(EmissionRecordDAO recordDAO, IsoConsultantAgent aiAgent, UserDAO userDAO) {
+    public WebController(EmissionRecordDAO recordDAO, IsoConsultantAgent aiAgent) {
         this.recordDAO = recordDAO;
         this.aiAgent = aiAgent;
-        this.userDAO = userDAO;
     }
 
     @GetMapping("/")

@@ -4,6 +4,9 @@ import com.greencert.db.DatabaseManager;
 import com.greencert.db.model.User;
 import java.sql.*;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class UserDAOImpl implements UserDAO {
 
     @Override
