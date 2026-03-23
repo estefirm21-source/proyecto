@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class EmissionRecord {
     
     private Integer id;
+    private Integer userId;
     private String sourceType;
     private double amount;
     private double calculatedCarbon;
@@ -13,7 +14,8 @@ public class EmissionRecord {
     public EmissionRecord() {
     }
 
-    public EmissionRecord(String sourceType, double amount, double calculatedCarbon, LocalDate recordDate) {
+    public EmissionRecord(Integer userId, String sourceType, double amount, double calculatedCarbon, LocalDate recordDate) {
+        this.userId = userId;
         this.sourceType = sourceType;
         this.amount = amount;
         this.calculatedCarbon = calculatedCarbon;
@@ -26,6 +28,14 @@ public class EmissionRecord {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getSourceType() {

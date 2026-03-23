@@ -33,18 +33,36 @@ public class DatabaseManager {
     }
 
     private static void initializeDatabase() {
-        String createTableSql = "CREATE TABLE IF NOT EXISTS emission_records (" +
+        String createUsersTableSql = "CREATE TABLE IF NOT EXISTS users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "username VARCHAR(50) UNIQUE NOT NULL, " +
+                "password VARCHAR(100) NOT NULL, " +
+                "company_name VARCHAR(100) NOT NULL" +
+                ");";
+
+        String createRecordsTableSql = "CREATE TABLE IF NOT EXISTS emission_records (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "user_id INTEGER, " +
                 "source_type VARCHAR(50) NOT NULL, " +
                 "amount DOUBLE NOT NULL, " +
                 "calculated_carbon DOUBLE NOT NULL, " +
-                "record_date DATE NOT NULL" +
+                "record_date DATE NOT NULL, " +
+                "FOREIGN KEY (user_id) REFERENCES users(id)" +
                 ");";
 
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement()) {
-            stmt.execute(createTableSql);
-            System.out.println("SQLite database and 'emission_records' table verified/created successfully.");
+            stmt.execute(createUsersTableSql);
+            stmt.execute(createRecordsTableSql);
+            
+            // Try adding user_id if it's an old database (migration)
+            try {
+                stmt.execute("ALTER TABLE emission_records ADD COLUMN user_id INTEGER REFERENCES users(id);");
+            } catch (SQLException e) {
+                // Column probably already exists
+            }
+            
+            System.out.println("Database tables verified/created successfully.");
         } catch (SQLException e) {
             System.err.println("Error creating database schema.");
             e.printStackTrace();

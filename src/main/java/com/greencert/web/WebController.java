@@ -6,6 +6,9 @@ import com.greencert.core.factory.EmissionSourceFactory;
 import com.greencert.core.model.EmissionSource;
 import com.greencert.db.dao.EmissionRecordDAO;
 import com.greencert.db.model.EmissionRecord;
+import com.greencert.db.dao.UserDAO;
+import com.greencert.db.model.User;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,16 +21,24 @@ public class WebController {
 
     private final EmissionRecordDAO recordDAO;
     private final IsoConsultantAgent aiAgent;
+    private final UserDAO userDAO;
 
-    public WebController(EmissionRecordDAO recordDAO, IsoConsultantAgent aiAgent) {
+    public WebController(EmissionRecordDAO recordDAO, IsoConsultantAgent aiAgent, UserDAO userDAO) {
         this.recordDAO = recordDAO;
         this.aiAgent = aiAgent;
+        this.userDAO = userDAO;
     }
 
     @GetMapping("/")
-    public String index(Model model) {
-        List<EmissionRecord> records = recordDAO.findAll();
+    public String index(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        List<EmissionRecord> records = recordDAO.findByUserId(user.getId());
         model.addAttribute("records", records);
+        model.addAttribute("user", user);
         
         // --- Statistics for Chart.js ---
         double eTotal = records.stream().filter(r -> "electricity".equals(r.getSourceType())).mapToDouble(EmissionRecord::getCalculatedCarbon).sum();
@@ -47,14 +58,17 @@ public class WebController {
     }
 
     @PostMapping("/calculate")
-    public String calculate(@RequestParam String type, @RequestParam double amount) {
+    public String calculate(HttpSession session, @RequestParam String type, @RequestParam double amount) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) return "redirect:/login";
+
         try {
             // Reusing previously structured OOP logic
             EmissionSource source = EmissionSourceFactory.createEmissionSource(type, amount);
             double calculatedCarbon = source.calculateCarbonFootprint();
             
             // SQL Persistence
-            EmissionRecord record = new EmissionRecord(type, amount, calculatedCarbon, LocalDate.now());
+            EmissionRecord record = new EmissionRecord(user.getId(), type, amount, calculatedCarbon, LocalDate.now());
             recordDAO.save(record);
         } catch (Exception e) {
             e.printStackTrace();

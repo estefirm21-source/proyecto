@@ -89,7 +89,8 @@ public class Main {
             System.out.println("Resultado: " + source.getReportDetails());
 
             // 2. Uso de Persistencia (SQL)
-            EmissionRecord record = new EmissionRecord(type, amount, calculatedCarbon, LocalDate.now());
+            // Use 1 as a default user ID for CLI operations
+            EmissionRecord record = new EmissionRecord(1, type, amount, calculatedCarbon, LocalDate.now());
             recordDAO.save(record);
             System.out.println("¡Registro guardado exitosamente en la base de datos!");
             
@@ -100,7 +101,8 @@ public class Main {
 
     private static void viewHistory() {
         System.out.println("\n-- Historial de Emisiones --");
-        List<EmissionRecord> records = recordDAO.findAll();
+        // Show history for the default CLI user (ID 1)
+        List<EmissionRecord> records = recordDAO.findByUserId(1);
         
         if (records.isEmpty()) {
             System.out.println("No hay registros almacenados.");

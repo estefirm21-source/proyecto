@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface EmissionRecordDAO {
     void save(EmissionRecord record);
-    List<EmissionRecord> findAll();
+    List<EmissionRecord> findByUserId(int userId);
     void delete(int id);
 }

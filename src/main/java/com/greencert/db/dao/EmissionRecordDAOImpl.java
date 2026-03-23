@@ -15,18 +15,23 @@ public class EmissionRecordDAOImpl implements EmissionRecordDAO {
 
     @Override
     public void save(EmissionRecord record) {
-        String sql = "INSERT INTO emission_records (source_type, amount, calculated_carbon, record_date) VALUES (?, ?, ?, ?)";
-
+        String sql = "INSERT INTO emission_records (user_id, source_type, amount, calculated_carbon, record_date) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        
         try (Connection conn = DatabaseManager.getConnection()) {
-            
             // Demonstrate transaction control (Rubric requirement)
             conn.setAutoCommit(false); 
             
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, record.getSourceType());
-                stmt.setDouble(2, record.getAmount());
-                stmt.setDouble(3, record.getCalculatedCarbon());
-                stmt.setString(4, record.getRecordDate().toString()); 
+                if (record.getUserId() != null) {
+                    stmt.setInt(1, record.getUserId());
+                } else {
+                    stmt.setNull(1, Types.INTEGER);
+                }
+                stmt.setString(2, record.getSourceType());
+                stmt.setDouble(3, record.getAmount());
+                stmt.setDouble(4, record.getCalculatedCarbon());
+                stmt.setString(5, record.getRecordDate().toString()); 
                 
                 stmt.executeUpdate();
                 conn.commit(); // Explicit Commit
@@ -43,22 +48,25 @@ public class EmissionRecordDAOImpl implements EmissionRecordDAO {
     }
 
     @Override
-    public List<EmissionRecord> findAll() {
+    public List<EmissionRecord> findByUserId(int userId) {
         List<EmissionRecord> records = new ArrayList<>();
-        String sql = "SELECT * FROM emission_records ORDER BY record_date DESC, id DESC";
-
+        String sql = "SELECT * FROM emission_records WHERE user_id = ? ORDER BY record_date DESC, id DESC";
+        
         try (Connection conn = DatabaseManager.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                EmissionRecord record = new EmissionRecord();
-                record.setId(rs.getInt("id"));
-                record.setSourceType(rs.getString("source_type"));
-                record.setAmount(rs.getDouble("amount"));
-                record.setCalculatedCarbon(rs.getDouble("calculated_carbon"));
-                record.setRecordDate(LocalDate.parse(rs.getString("record_date")));
-                records.add(record);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    EmissionRecord record = new EmissionRecord();
+                    record.setId(rs.getInt("id"));
+                    record.setUserId(rs.getInt("user_id"));
+                    record.setSourceType(rs.getString("source_type"));
+                    record.setAmount(rs.getDouble("amount"));
+                    record.setCalculatedCarbon(rs.getDouble("calculated_carbon"));
+                    record.setRecordDate(LocalDate.parse(rs.getString("record_date")));
+                    records.add(record);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
