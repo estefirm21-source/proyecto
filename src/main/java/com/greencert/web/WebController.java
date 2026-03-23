@@ -6,7 +6,6 @@ import com.greencert.core.factory.EmissionSourceFactory;
 import com.greencert.core.model.EmissionSource;
 import com.greencert.db.dao.EmissionRecordDAO;
 import com.greencert.db.model.EmissionRecord;
-import com.greencert.db.dao.UserDAO;
 import com.greencert.db.model.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
